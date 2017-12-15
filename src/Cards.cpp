@@ -1,9 +1,9 @@
 ///\file
 #include "Cards.h"
-#include "CardTexManager.h"
+#include "TexManager.h"
 
 Cards::Cards(const char* cardTex, int x, int y, char s, int n, bool ACTIVE) {
-	tex = CardTexManager::LoadTexture(cardTex);
+	tex = TexManager::LoadTexture(cardTex);
 	xpos = x;
 	ypos = y;
 	suit = s;

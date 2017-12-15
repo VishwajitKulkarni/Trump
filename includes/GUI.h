@@ -38,6 +38,7 @@ public:
 	void PR(char suit,int num);
 	void PU(char suit,int num);
 	void updateScore(char A,char B);
+	void loadPlayerID(std::string ID1,std::string ID2,std::string ID3,std::string ID4);
 
 	void close();
 	std::string getIP() {

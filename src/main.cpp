@@ -19,6 +19,7 @@ int main(int argc, const char * argv[]) {
 	gui->initialize();
 	gui->DisplayWindowForIP();
 	std::cout<<gui->getIP()<<std::endl;
+	gui->loadPlayerID("Player 1","Player 2","Player 3","Player 4");
 	for (int var = 0; var < 13; ++var) {
 	gui->loadPlayerHand('H',14);
 	}
@@ -28,7 +29,7 @@ int main(int argc, const char * argv[]) {
 	gui->setTrump();
 	gui->updateScore(A,B);
 
-	SDL_Delay(2000);
+	SDL_Delay(9000);
 
 	gui->close();
 	return 0;

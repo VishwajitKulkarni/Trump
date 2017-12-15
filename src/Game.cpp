@@ -1,9 +1,9 @@
 ///\file
 #include "Game.h"
-#include "CardTexManager.h"
 #include <vector>
 #include <string.h>
 #include <SDL2/SDL_mixer.h>
+#include <TexManager.h>
 
 std::vector<Cards*> player;
 Cards* card1;
@@ -20,11 +20,11 @@ Game::Game() {
 	PU = NULL;
 	PR = NULL;
 	suitsDisplay.x = SCREEN_WIDTH / 2 - 200;
-	suitsDisplay.y = 400;
+	suitsDisplay.y = 200;
 	suitsDisplay.h = 100;
 	suitsDisplay.w = 400;
 	text.x = SCREEN_WIDTH / 2 - 200;
-	text.y = 300;
+	text.y = 100;
 	text.h = 100;
 	text.w = 400;
 	Trump = '0';
@@ -36,7 +36,6 @@ Game::Game() {
 	Trump = '0';
 	isRunning = NULL;
 	window = NULL;
-	ip_surface = NULL;
 	ip_texture = NULL;
 	ip_color.r = 255;
 	ip_color.g = 255;
@@ -62,6 +61,19 @@ Game::Game() {
 	TeamA = "Score Team A:  x";
 	TeamB = "Score Team B:  x";
 	showScore = false;
+	playerIDFont = NULL;
+	playerIDDown = NULL;
+	playerIDLeft = NULL;
+	playerIDUp = NULL;
+	playerIDRight = NULL;
+	playerIDColor.r = 0;
+	playerIDColor.g = 0;
+	playerIDColor.b = 0;
+	playerIDColor.a = 255;
+	IDDown = "";
+	IDLeft = "";
+	IDRight = "";
+	IDUp = "";
 }
 
 Game::~Game() {
@@ -79,14 +91,13 @@ void Game::init(int xpos, int ypos, int width, int height) {
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer) {
 			//SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-			backgroundtex = CardTexManager::LoadTexture("assets/test.png");
-			suitSelectTex = CardTexManager::LoadTexture("assets/suit.png");
-			textTex = CardTexManager::LoadTexture("assets/text.png");
-			SDL_FreeSurface(surface);
+			backgroundtex = TexManager::LoadTexture("assets/trumpbackdrop.png");
+			suitSelectTex = TexManager::LoadTexture("assets/suit.png");
+			textTex = TexManager::LoadTexture("assets/text.png");
 			std::cout << "Renderer created" << std::endl;
 			TTF_Init();
 			ip_font = TTF_OpenFont("assets/DejaVuSans.ttf", 50);
-
+			playerIDFont = TTF_OpenFont("assets/Tahoma.ttf", 15);
 		}
 
 		isRunning = true;
@@ -146,9 +157,8 @@ bool Game::handleEvent() {
 
 void Game::RenderIP() {
 	int w = 0, h = 0;
-	ip_surface = TTF_RenderText_Solid(ip_font, ip_string.c_str(), ip_color);
-	ip_texture = SDL_CreateTextureFromSurface(renderer, ip_surface);
-	SDL_FreeSurface(ip_surface);
+	ip_texture = TexManager::LoadTextureFromString(ip_string.c_str(),
+			ip_font, ip_color);
 	SDL_QueryTexture(ip_texture, NULL, NULL, &w, &h);
 	ip_Rect.x = 0;
 	ip_Rect.y = 0;
@@ -181,6 +191,18 @@ void Game::Renderer() {
 	if (showScore) {
 		SDL_RenderCopy(renderer, TeamATex, NULL, &TeamARect);
 		SDL_RenderCopy(renderer, TeamBTex, NULL, &TeamBRect);
+		playerIDRect.x = 834;
+		playerIDRect.y = 424;
+		SDL_RenderCopy(renderer, playerIDDown, NULL, &playerIDRect);
+		playerIDRect.x = 69;
+		playerIDRect.y = 280;
+		SDL_RenderCopy(renderer, playerIDLeft, NULL, &playerIDRect);
+		playerIDRect.x = 484;
+		playerIDRect.y = 22;
+		SDL_RenderCopy(renderer, playerIDUp, NULL, &playerIDRect);
+		playerIDRect.x = 1000;
+		playerIDRect.y = 280;
+		SDL_RenderCopy(renderer, playerIDRight, NULL, &playerIDRect);
 	}
 	if (PlayerLeft) {
 		PL->Render();
@@ -254,19 +276,19 @@ void Game::playerMove() {
 
 void Game::selectTrumpButton(int x, int y) {
 
-	if ((x > 440) && (x < 540) && (y > 400) && (y < 500)) {
+	if ((x > 440) && (x < 540) && (y > 200) && (y < 300)) {
 		Trump = 'D';
 		TakeTrump = false;
 
-	} else if ((x > 540) && (x < 640) && (y > 400) && (y < 500)) {
+	} else if ((x > 540) && (x < 640) && (y > 200) && (y < 300)) {
 		Trump = 'S';
 		TakeTrump = false;
 
-	} else if ((x > 640) && (x < 740) && (y > 400) && (y < 500)) {
+	} else if ((x > 640) && (x < 740) && (y > 200) && (y < 300)) {
 		Trump = 'H';
 		TakeTrump = false;
 
-	} else if ((x > 740) && (x < 840) && (y > 400) && (y < 500)) {
+	} else if ((x > 740) && (x < 840) && (y > 200) && (y < 300)) {
 		Trump = 'C';
 		TakeTrump = false;
 
@@ -291,12 +313,12 @@ void Game::LoadPR(std::string fileName, char s, int n) {
 }
 
 void Game::trumpTex(std::string fileName) {
-	TrumpTex = CardTexManager::LoadTexture("assets/trump.png");
+	TrumpTex = TexManager::LoadTexture("assets/trump.png");
 	TrumpText.x = 10;
 	TrumpText.y = 0;
 	TrumpText.w = 150;
 	TrumpText.h = 75;
-	TrumpSuitTex = CardTexManager::LoadTexture(fileName.c_str());
+	TrumpSuitTex = TexManager::LoadTexture(fileName.c_str());
 	TrumpSuit.x = 45;
 	TrumpSuit.y = 75;
 	TrumpSuit.w = 80;
@@ -308,22 +330,33 @@ void Game::score(char a, char b) {
 	TeamA[15] = a;
 	TeamB[15] = b;
 	int w = 0, h = 0;
-	surface = TTF_RenderText_Solid(ip_font, TeamA.c_str(), ip_color);
-	TeamATex = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
-	surface = TTF_RenderText_Solid(ip_font, TeamB.c_str(), ip_color);
-	TeamBTex = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
+	TeamATex = TexManager::LoadTextureFromString(TeamA.c_str(), ip_font,
+			ip_color);
+	TeamBTex = TexManager::LoadTextureFromString(TeamB.c_str(), ip_font,
+			ip_color);
 	//SDL_QueryTexture(TeamATex, NULL, NULL, &w, &h);
-	TeamARect.x = 800;
+	TeamARect.x = 850;
 	TeamARect.y = 50;
 	TeamARect.w = 400;
 	TeamARect.h = 25;
 	//SDL_QueryTexture(TeamBTex, NULL, NULL, &w, &h);
-	TeamBRect.x = 800;
+	TeamBRect.x = 850;
 	TeamBRect.y = 110;
 	TeamBRect.w = 400;
 	TeamBRect.h = 25;
+}
+
+void Game::playerIDTex() {
+	playerIDDown = TexManager::LoadTextureFromString(IDDown.c_str(),
+			playerIDFont, playerIDColor);
+	playerIDLeft = TexManager::LoadTextureFromString(IDLeft.c_str(),
+			playerIDFont, playerIDColor);
+	playerIDUp = TexManager::LoadTextureFromString(IDUp.c_str(), playerIDFont,
+			playerIDColor);
+	playerIDRight = TexManager::LoadTextureFromString(IDRight.c_str(),
+			playerIDFont, playerIDColor);
+	playerIDRect.w = 100;
+	playerIDRect.h = 25;
 }
 
 void Game::update() {

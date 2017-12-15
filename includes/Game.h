@@ -18,10 +18,8 @@
 #include "Cards.h"
 #include <SDL2/SDL_ttf.h>
 
-
 #define  SCREEN_WIDTH  1280
 #define  SCREEN_HEIGHT  768
-
 
 class Game {
 public:
@@ -44,12 +42,13 @@ public:
 	void clean();
 	void load(std::string file, char s, int n);
 	void button(int x, int y);
-	void selectTrumpButton(int x,int y);
-	void LoadPL(std::string fileName,char s,int n);
-	void LoadPU(std::string fileName,char s,int n);
-	void LoadPR(std::string fileName,char s,int n);
+	void selectTrumpButton(int x, int y);
+	void LoadPL(std::string fileName, char s, int n);
+	void LoadPU(std::string fileName, char s, int n);
+	void LoadPR(std::string fileName, char s, int n);
 	void trumpTex(std::string file);
-	void score(char a,char b);
+	void score(char a, char b);
+	void playerIDTex();
 
 	static SDL_Renderer *renderer;
 
@@ -64,8 +63,6 @@ public:
 	void setMyTurn(bool myTurn) {
 		this->myTurn = myTurn;
 	}
-
-
 
 	int getPlayedCard() const {
 		return playedCard;
@@ -107,6 +104,22 @@ public:
 		this->showScore = showScore;
 	}
 
+	void setIdDown(const std::string& idDown) {
+		IDDown = idDown;
+	}
+
+	void setIdLeft(const std::string& idLeft) {
+		IDLeft = idLeft;
+	}
+
+	void setIdRight(const std::string& idRight) {
+		IDRight = idRight;
+	}
+
+	void setIdUp(const std::string& idUp) {
+		IDUp = idUp;
+	}
+
 private:
 	char playedSuit;
 	int playedCard;
@@ -115,7 +128,6 @@ private:
 	bool isRunning;
 	SDL_Window *window;
 	TTF_Font* ip_font;
-	SDL_Surface* ip_surface;
 	SDL_Texture* ip_texture;
 	SDL_Texture* TeamATex;
 	SDL_Texture* TeamBTex;
@@ -146,8 +158,17 @@ private:
 	SDL_Rect TeamARect;
 	SDL_Rect TeamBRect;
 	bool showScore;
-
-
+	TTF_Font* playerIDFont;
+	SDL_Texture* playerIDDown;
+	SDL_Texture* playerIDLeft;
+	SDL_Texture* playerIDUp;
+	SDL_Texture* playerIDRight;
+	SDL_Rect playerIDRect;
+	SDL_Color playerIDColor;
+	std::string IDDown;
+	std::string IDLeft;
+	std::string IDRight;
+	std::string IDUp;
 };
 
 #endif /* GAME_H_ */

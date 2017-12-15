@@ -46,6 +46,14 @@ bool GUI::isRunning() {
 	return game->running();
 }
 
+void GUI::loadPlayerID(std::string ID1,std::string ID2,std::string ID3,std::string ID4){
+	game->setIdDown(ID1);
+	game->setIdLeft(ID2);
+	game->setIdUp(ID3);
+	game->setIdRight(ID4);
+	game->playerIDTex();
+}
+
 void GUI::loadPlayerHand(char suit, int num) {
 
 	std::string fileName = "assets/xxx.png";
