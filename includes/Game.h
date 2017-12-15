@@ -103,6 +103,10 @@ public:
 		return ip_string;
 	}
 
+	void setShowScore(bool showScore) {
+		this->showScore = showScore;
+	}
+
 private:
 	char playedSuit;
 	int playedCard;
@@ -139,6 +143,10 @@ private:
 	char scoreTeamB;
 	std::string TeamA;
 	std::string TeamB;
+	SDL_Rect TeamARect;
+	SDL_Rect TeamBRect;
+	bool showScore;
+
 
 };
 
