@@ -128,6 +128,9 @@ void GUI::otherPlayers(char suit, int num, int whichPlayer) {
 }
 
 void GUI::updateScore() {
+	game->setShowScore(true);
+	game->score('1','1');
+	game->Renderer();
 
 }
 

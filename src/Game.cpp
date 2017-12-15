@@ -61,6 +61,7 @@ Game::Game() {
 	TeamBTex = NULL;
 	TeamA = "Score Team A:  x";
 	TeamB = "Score Team B:  x";
+	showScore = false;
 }
 
 Game::~Game() {
@@ -176,6 +177,10 @@ void Game::Renderer() {
 	if (showTrump) {
 		SDL_RenderCopy(renderer, TrumpTex, NULL, &TrumpText);
 		SDL_RenderCopy(renderer, TrumpSuitTex, NULL, &TrumpSuit);
+	}
+	if (showScore) {
+		SDL_RenderCopy(renderer, TeamATex, NULL, &TeamARect);
+		SDL_RenderCopy(renderer, TeamBTex, NULL, &TeamBRect);
 	}
 	if (PlayerLeft) {
 		PL->Render();
@@ -299,22 +304,28 @@ void Game::trumpTex(std::string fileName) {
 
 }
 
-/*void Game::score(char a, char b) {
+void Game::score(char a, char b) {
 	TeamA[15] = a;
 	TeamB[15] = b;
+	int w = 0, h = 0;
 	surface = TTF_RenderText_Solid(ip_font, TeamA.c_str(), ip_color);
 	TeamATex = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 	surface = TTF_RenderText_Solid(ip_font, TeamB.c_str(), ip_color);
 	TeamBTex = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-	SDL_QueryTexture(ip_texture, NULL, NULL, &w, &h);
-		ip_Rect.x = 0;
-		ip_Rect.y = 0;
-		ip_Rect.w = w;
-		ip_Rect.h = 100;
+	//SDL_QueryTexture(TeamATex, NULL, NULL, &w, &h);
+	TeamARect.x = 800;
+	TeamARect.y = 50;
+	TeamARect.w = 400;
+	TeamARect.h = 25;
+	//SDL_QueryTexture(TeamBTex, NULL, NULL, &w, &h);
+	TeamBRect.x = 800;
+	TeamBRect.y = 110;
+	TeamBRect.w = 400;
+	TeamBRect.h = 25;
 }
-*/
+
 void Game::update() {
 	for (int var = 0; var < player.size(); var++) {
 		player[var]->update();

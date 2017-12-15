@@ -24,6 +24,7 @@ int main(int argc, const char * argv[]) {
 	gui->AskTrump();
 	gui->displayAllCards();
 	gui->setTrump();
+	gui->updateScore();
 
 	SDL_Delay(2000);
 
