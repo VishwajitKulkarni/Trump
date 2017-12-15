@@ -37,7 +37,7 @@ public:
 	void PL(char suit,int num);
 	void PR(char suit,int num);
 	void PU(char suit,int num);
-	void updateScore();
+	void updateScore(char A,char B);
 
 	void close();
 	std::string getIP() {

@@ -13,6 +13,8 @@ int main(int argc, const char * argv[]) {
 	char suit;
 	int num = 0;
 	char trump;
+	char A='7';
+	char B='0';
 	GUI* gui = new GUI();
 	gui->initialize();
 	gui->DisplayWindowForIP();
@@ -24,7 +26,7 @@ int main(int argc, const char * argv[]) {
 	gui->AskTrump();
 	gui->displayAllCards();
 	gui->setTrump();
-	gui->updateScore();
+	gui->updateScore(A,B);
 
 	SDL_Delay(2000);
 
