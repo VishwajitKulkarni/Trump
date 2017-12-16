@@ -20,5 +20,5 @@ int main(int argc, char **argv) {
 	GameManager gameManager(&txFrame, &rxFrame);
 	server.createNetworkThread();
 	gameManager.createNetworkThread();
-	while(1);
+
 }
